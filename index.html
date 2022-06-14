@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Project First Partial</title>
+    <style>
+    .Ind {
+      display: grid;
+      grid-template-columns: 100px 125px 100px;
+      margin: 20px;
+    }
+    .functions {
+      display: grid;
+      grid-template-columns: 100px 250px ;
+      margin: 20px;
+    }
+    .TranslateSliders {
+      display: grid;
+      grid-template-columns: 250px 250px 250px 250px 250px 250px;
+      margin: 20px;
+    }
+    .ScaleSliders {
+      display: grid;
+      grid-template-columns: 250px 250px 250px 250px 250px 250px;
+      margin: 20px;
+    }
+    .colorSliders {
+      display: grid;
+      grid-template-columns: 250px 250px 250px;
+      margin: 20px;
+    }
+    .rotationSliders {
+      display: grid;
+      grid-template-columns: 250px 250px 250px 250px 250px 250px;
+      margin: 20px;
+    }
+    p {
+      text-align: center;
+    }
+    </style>
+  </head>
+  <body onload="main()">
+    <table>
+      <tr>
+          <th>Current plane</th>
+          <th>All planes</th>
+      </tr>
+    <tr>
+    <td>
+    <canvas id="webgl" width="600" height="600">
+      Please use a browser that supports canvas
+    </canvas>
+    </td>
+    <td>
+    <canvas id="webgl2" width="600" height="600">
+      Please use a browser that supports canvas
+    </canvas>
+    </td>
+
+    </tr>
+    </table>
+    <p >Right click to add another 3DPlane</p>
+
+    <div class="tools">
+
+      <div class="wrapper">
+        <div class="Ind">
+            <button type="button" name="button" id="Indexless" onclick="prevIndex()">Previous</button>
+            <p style="text-align: left;">Current index: <span id="IndexVal">0</span></p>
+            <button type="button" name="button" id="Indexmore" onclick="nextIndex()">Next</button>
+          </div>
+
+
+
+
+        <div class="functions">
+
+
+        <button type="button" name="button" onclick="undoLast()">Undo last</button>
+        <p style="text-align: left; margin: 20px;">only errases triangles from current index</p>
+
+
+        <button type="button" name="button" onclick="undoAll()">Errase All</button>
+        <p style="text-align: left; margin: 20px;">errases all</p>
+
+        <p style="text-align: left;">Depth: <span id="SliderD">0</span></p>
+        <input type="range" min="-2.0" max="2.0" step="0.2"value="0" class="slider" id="depthSliderValue">
+
+        </div>
+
+        Colors
+        <div class="colorSliders">
+          <p>R component: <span id="SliderR">255</span></p>
+          <p>G component: <span id="SliderG">255</span></p>
+          <p>B component: <span id="SliderB">255</span></p>
+          <input type="range" min="0" max="255" value="255" class="slider" id="rgbSliderRvalue">
+          <input type="range" min="0" max="255" value="255" class="slider" id="rgbSliderGvalue">
+          <input type="range" min="0" max="255" value="255" class="slider" id="rgbSliderBvalue">
+        </div>
+
+        Translate
+        <div class="TranslateSliders">
+          <p>Translate X: <span id="translateSliderX">0</span></p>
+          <p>Translate Y: <span id="translateSliderY">0</span></p>
+          <p>Translate Z: <span id="translateSliderZ">0</span></p>
+          <p>Global X: <span id="globalSliderX">0</span></p>
+          <p>Global Y: <span id="globalSliderY">0</span></p>
+          <p>Global Z: <span id="globalSliderZ">0</span></p>
+          <input type="range" min="-1.0" max="1.0"  step="0.1" value="0" class="slider" id="translateXvalue">
+          <input type="range" min="-1.0" max="1.0" step="0.1" value="0" class="slider" id="translateYvalue">
+          <input type="range" min="-1.0" max="1.0" step="0.1" value="0" class="slider" id="translateZvalue">
+          <input type="range" min="-1.0" max="1.0"  step="0.1" value="0" class="slider" id="globaltranslateXvalue">
+          <input type="range" min="-1.0" max="1.0" step="0.1" value="0" class="slider" id="globaltranslateYvalue">
+          <input type="range" min="-1.0" max="1.0" step="0.1" value="0" class="slider" id="globaltranslateZvalue">
+        </div>
+
+        Scale
+        <div class="ScaleSliders">
+          <p>Scale X: <span id="scaleSliderX">1</span></p>
+          <p>Scale Y: <span id="scaleSliderY">1</span></p>
+          <p>Scale Z: <span id="scaleSliderZ">1</span></p>
+          <p>Global Scale X: <span id="globalscaleSliderX">1</span></p>
+          <p>Global Scale Y: <span id="globalscaleSliderY">1</span></p>
+          <p>Global Scale Z: <span id="globalscaleSliderZ">1</span></p>
+          <input type="range" min="-2.0" max="3.0"  step="0.2" value="1" class="slider" id="scaleXvalue">
+          <input type="range" min="-2.0" max="3.0" step="0.2" value="1" class="slider" id="scaleYvalue">
+          <input type="range" min="-2.0" max="3.0" step="0.2" value="1" class="slider" id="scaleZvalue">
+          <input type="range" min="-2.0" max="3.0"  step="0.2" value="1" class="slider" id="globalscaleXvalue">
+          <input type="range" min="-2.0" max="3.0" step="0.2" value="1" class="slider" id="globalscaleYvalue">
+          <input type="range" min="-2.0" max="3.0" step="0.2" value="1" class="slider" id="globalscaleZvalue">
+        </div>
+
+
+        Rotations
+      <div class="rotationSliders">
+        <p>Rotation in x axis: <span id="rotationValueXSlider">0</span></p>
+        <p>Rotation in y axis: <span id="rotationValueYSlider">0</span></p>
+        <p>Rotation in z axis: <span id="rotationValueZSlider">0</span></p>
+        <p>Global Rotation in x axis: <span id="globalrotationValueXSlider">0</span></p>
+        <p>Global Rotation in y axis: <span id="globalrotationValueYSlider">0</span></p>
+        <p>Global Rotation in z axis: <span id="globalrotationValueZSlider">0</span></p>
+        <input type="range" min="-180" max="180" value="0" class="slider" id="rotationValueX">
+        <input type="range" min="-180" max="180" value="0" class="slider" id="rotationValueY">
+        <input type="range" min="-180" max="180" value="0" class="slider" id="rotationValueZ">
+        <input type="range" min="-180" max="180" value="0" class="slider" id="globalrotationValueX">
+        <input type="range" min="-180" max="180" value="0" class="slider" id="globalrotationValueY">
+        <input type="range" min="-180" max="180" value="0" class="slider" id="globalrotationValueZ">
+      </div>
+
+
+      </div>
+
+    </div>
+
+
+
+    <script src="lib/webgl-utils.js"></script>
+    <script src="lib/webgl-debug.js"></script>
+    <script src="lib/cuon-utils.js"></script>
+    <script src="lib/cuon-matrix.js"></script>
+    <script src="Parcial1BenjaGodoy.js"></script>
+  </body>
+</html>
